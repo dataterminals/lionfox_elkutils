@@ -1,0 +1,5 @@
+{
+    "enabled": true,
+    "maxSearchRadius": 1000,
+    "allowCrossPlayer": true
+}

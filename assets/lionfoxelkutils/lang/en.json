@@ -1,0 +1,34 @@
+{
+    "setting-enabled": "ElkUtils enabled",
+    "setting-enabled-desc": "Master switch for ElkUtils commands and hotkeys. When OFF, all /elk subcommands and the recall/goto hotkeys are no-ops.",
+
+    "setting-max_search_radius": "Max elk search radius (blocks)",
+    "setting-max_search_radius-desc": "How far out (horizontally) ElkUtils looks for your closest owned elk. Only loaded chunks are scanned; an elk in an unloaded chunk can't be found regardless of this value.",
+
+    "setting-allow_cross_player": "Allow cross-player teleports",
+    "setting-allow_cross_player-desc": "When ON, admins may use /elk send <player> and /elk fetch <player>. When OFF, those subcommands require root privilege.",
+
+    "hotkey-recall": "ElkUtils: recall elk to me",
+    "hotkey-goto":   "ElkUtils: teleport me to my elk",
+
+    "cmd-desc":         "Admin teleport utilities for tamed elk. Subcommands: recall, goto, send, fetch, move.",
+    "cmd-recall-desc":  "Teleport your closest owned elk to your position.",
+    "cmd-goto-desc":    "Teleport yourself to your closest owned elk.",
+    "cmd-send-desc":    "Teleport your closest owned elk to another player. Usage: /elk send <player>",
+    "cmd-fetch-desc":   "Teleport another player to your closest owned elk. Usage: /elk fetch <player>",
+    "cmd-move-desc":    "Teleport your closest owned elk to absolute coordinates. Usage: /elk move <x> <y> <z>",
+
+    "msg-disabled":         "ElkUtils is disabled in the mod config.",
+    "msg-cross-disabled":   "Cross-player teleports are disabled in the mod config.",
+    "msg-no-privilege":     "You don't have the privilege required to use ElkUtils.",
+    "msg-no-self-pos":      "Couldn't read your position. Try again in a moment.",
+    "msg-no-elk":           "Couldn't find any elk you own in a loaded chunk within the search radius.",
+    "msg-no-target":        "No matching online player.",
+    "msg-target-not-loaded": "Target player {0} has no entity loaded right now.",
+    "msg-recall-ok":        "ElkUtils: your elk has been teleported to you.",
+    "msg-goto-ok":          "ElkUtils: teleported you to your elk.",
+    "msg-send-ok":          "ElkUtils: your elk has been sent to {0}.",
+    "msg-fetch-ok":         "ElkUtils: {0} has been teleported to your elk.",
+    "msg-fetched-by":       "ElkUtils: you were teleported to {0}'s elk.",
+    "msg-move-ok":          "ElkUtils: your elk has been teleported to {0}."
+}

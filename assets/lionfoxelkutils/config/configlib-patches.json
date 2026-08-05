@@ -1,0 +1,37 @@
+{
+    "version": 1,
+    "patches": {
+        "boolean": {
+            "lionfoxelkutils:config/lionfoxelkutils.json": {
+                "enabled": "enabled",
+                "allowCrossPlayer": "allow_cross_player"
+            }
+        },
+        "integer": {
+            "lionfoxelkutils:config/lionfoxelkutils.json": {
+                "maxSearchRadius": "max_search_radius"
+            }
+        }
+    },
+    "settings": [
+        {
+            "code": "enabled",
+            "type": "boolean",
+            "ingui": "lionfoxelkutils:setting-enabled",
+            "default": true
+        },
+        {
+            "code": "max_search_radius",
+            "type": "integer",
+            "ingui": "lionfoxelkutils:setting-max_search_radius",
+            "default": 1000,
+            "range": { "min": 50, "max": 5000 }
+        },
+        {
+            "code": "allow_cross_player",
+            "type": "boolean",
+            "ingui": "lionfoxelkutils:setting-allow_cross_player",
+            "default": true
+        }
+    ]
+}
