@@ -3,12 +3,14 @@
     "modid": "lionfoxelkutils",
     "name": "ElkUtils",
     "description": "Admin teleport utilities for tamed elk. Bring your elk to you, teleport to your elk, send your elk to another player, fetch another player to your elk, or move your elk to coordinates. Commands (/elk recall|goto|send|fetch|move), default-unbound hotkeys for recall+goto (ESC > Controls), and a ConfigLib visual config panel.",
-    "authors": [ "lionfox" ],
-    "version": "1.0.0",
+    "authors": [
+        "lionfox"
+    ],
+    "version": "1.1.0",
     "side": "Universal",
     "requiredOnClient": true,
     "requiredOnServer": true,
     "dependencies": {
-        "game": "1.21.6"
+        "game": "1.22.0"
     }
 }

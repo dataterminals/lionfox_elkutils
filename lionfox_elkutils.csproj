@@ -1,20 +1,42 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <!-- Vintage Story 1.22 runs on .NET 10; mod assemblies must match. -->
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AssemblyName>lionfox_elkutils</AssemblyName>
     <RootNamespace>lionfox_elkutils</RootNamespace>
-    <OutputPath>../lionfox_elkutils_1.0.0</OutputPath>
+    <!-- Keep this in step with modinfo.json's "version". PackageMod names the
+         zip from it, and two different builds sharing one version string is the
+         trap that produced two distinct torchesheat_2.0.0.zip files on
+         2026-09-09 - the filename cannot tell them apart. -->
+    <Version>1.1.0</Version>
+    <!-- The repo root IS the loadable mod folder: modinfo.json, assets/ and the
+         built DLL sit side by side, and all three are tracked. Do not "tidy"
+         this into bin/ without also fixing what git tracks. -->
+    <OutputPath>../lionfox_elkutils</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <!-- Vintage Story install. Set the VINTAGE_STORY environment variable, or
-       override VS_PATH on the command line: dotnet build -p:VS_PATH=... -->
+
+  <!-- ── Vintage Story install directory ──────────────────────────────────
+       Resolution order: -p:VS_PATH=... , then the VINTAGE_STORY environment
+       variable Vintage Story itself sets, then the usual install locations.
+       The install has already moved once (D:\ on SylG5, H:\ on SylDesk), so a
+       hardcoded default is a machine fact and must never be the only path. -->
   <PropertyGroup>
-    <VS_PATH Condition="'$(VS_PATH)' == '' AND '$(VINTAGE_STORY)' != ''">$(VINTAGE_STORY)</VS_PATH>
-    <VS_PATH Condition="'$(VS_PATH)' == ''">D:\Vintagestory</VS_PATH>
+    <VS_PATH Condition="'$(VS_PATH)' == ''">$(VINTAGE_STORY)</VS_PATH>
+    <VS_PATH Condition="'$(VS_PATH)' == '' And Exists('$(LOCALAPPDATA)\Vintagestory\VintagestoryAPI.dll')">$(LOCALAPPDATA)\Vintagestory</VS_PATH>
+    <VS_PATH Condition="'$(VS_PATH)' == '' And Exists('C:\Program Files\Vintagestory\VintagestoryAPI.dll')">C:\Program Files\Vintagestory</VS_PATH>
+    <VS_PATH Condition="'$(VS_PATH)' == '' And Exists('D:\Vintagestory\VintagestoryAPI.dll')">D:\Vintagestory</VS_PATH>
+    <VS_PATH Condition="'$(VS_PATH)' == '' And Exists('H:\Vintagestory\VintagestoryAPI.dll')">H:\Vintagestory</VS_PATH>
   </PropertyGroup>
+
+  <!-- Fail loudly rather than build against a path that does not exist. -->
+  <Target Name="CheckVsPath" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(VS_PATH)\VintagestoryAPI.dll')"
+           Text="Could not find VintagestoryAPI.dll under VS_PATH='$(VS_PATH)'. Set the VINTAGE_STORY environment variable or build with -p:VS_PATH=&quot;C:\Path\To\Vintagestory&quot;." />
+  </Target>
 
   <ItemGroup>
     <Reference Include="VintagestoryAPI">
@@ -34,5 +56,25 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
+
+  <!-- ── Assemble a loadable mod folder and zip it ────────────────────────
+       The server payload wants a zip, not a checked-out tree. Staging into
+       build/ keeps that artifact separate from the repo-root mod folder. -->
+  <Target Name="PackageMod" AfterTargets="Build">
+    <PropertyGroup>
+      <ModStageDir>$(MSBuildProjectDirectory)\build\lionfoxelkutils</ModStageDir>
+      <ModZipPath>$(MSBuildProjectDirectory)\build\lionfoxelkutils_$(Version).zip</ModZipPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <ModAssets Include="assets\**\*" />
+    </ItemGroup>
+    <RemoveDir Directories="$(ModStageDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModStageDir)" />
+    <Copy SourceFiles="modinfo.json" DestinationFolder="$(ModStageDir)" />
+    <Copy SourceFiles="@(ModAssets)" DestinationFiles="@(ModAssets->'$(ModStageDir)\assets\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Delete Files="$(ModZipPath)" />
+    <ZipDirectory SourceDirectory="$(ModStageDir)" DestinationFile="$(ModZipPath)" />
+    <Message Importance="high" Text="Packaged mod -> $(ModZipPath)" />
+  </Target>
 
 </Project>

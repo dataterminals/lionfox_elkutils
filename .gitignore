@@ -1,3 +1,5 @@
 obj/
 bin/
 *.pdb
+build/
+*.zip

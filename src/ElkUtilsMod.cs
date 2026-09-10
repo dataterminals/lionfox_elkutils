@@ -206,7 +206,7 @@ namespace lionfox_elkutils
             var elk = FindClosestOwnedElk(p);
             if (elk == null) return TextCommandResult.Error(Lang.Get("lionfoxelkutils:msg-no-elk"));
 
-            var pos = target.Entity.ServerPos;
+            var pos = target.Entity.Pos;
             TeleportEntity(elk, pos.X, pos.Y, pos.Z);
             LogAction(p, $"sent elk {elk.EntityId} to {target.PlayerName} at ({pos.X:F1}, {pos.Y:F1}, {pos.Z:F1}).");
             return TextCommandResult.Success(Lang.Get("lionfoxelkutils:msg-send-ok", target.PlayerName));
@@ -225,7 +225,7 @@ namespace lionfox_elkutils
             var elk = FindClosestOwnedElk(p);
             if (elk == null) return TextCommandResult.Error(Lang.Get("lionfoxelkutils:msg-no-elk"));
 
-            var pos = elk.ServerPos;
+            var pos = elk.Pos;
             TeleportEntity(target.Entity, pos.X, pos.Y, pos.Z);
             Notify(target, Lang.Get("lionfoxelkutils:msg-fetched-by", p.PlayerName));
             LogAction(p, $"fetched {target.PlayerName} to elk {elk.EntityId} at ({pos.X:F1}, {pos.Y:F1}, {pos.Z:F1}).");
@@ -262,7 +262,7 @@ namespace lionfox_elkutils
                 return TextCommandResult.Error(Lang.Get("lionfoxelkutils:msg-no-elk"));
             }
 
-            var pos = p.Entity.ServerPos;
+            var pos = p.Entity.Pos;
             TeleportEntity(elk, pos.X, pos.Y, pos.Z);
             LogAction(p, $"recalled elk {elk.EntityId} to self at ({pos.X:F1}, {pos.Y:F1}, {pos.Z:F1}).");
             var msg = Lang.Get("lionfoxelkutils:msg-recall-ok");
@@ -281,7 +281,7 @@ namespace lionfox_elkutils
                 return TextCommandResult.Error(Lang.Get("lionfoxelkutils:msg-no-elk"));
             }
 
-            var pos = elk.ServerPos;
+            var pos = elk.Pos;
             TeleportEntity(p.Entity, pos.X, pos.Y, pos.Z);
             LogAction(p, $"teleported to elk {elk.EntityId} at ({pos.X:F1}, {pos.Y:F1}, {pos.Z:F1}).");
             var msg = Lang.Get("lionfoxelkutils:msg-goto-ok");
@@ -297,7 +297,7 @@ namespace lionfox_elkutils
         {
             if (sapi == null || player.Entity == null) return null;
 
-            var ppos = player.Entity.ServerPos.XYZ;
+            var ppos = player.Entity.Pos.XYZ;
             double maxR = config.maxSearchRadius;
             double maxRSq = maxR * maxR;
 
@@ -315,8 +315,8 @@ namespace lionfox_elkutils
                 if (bhv == null) continue;
                 if (!bhv.IsOwner(player.Entity)) continue;
 
-                double dx = e.ServerPos.X - ppos.X;
-                double dz = e.ServerPos.Z - ppos.Z;
+                double dx = e.Pos.X - ppos.X;
+                double dz = e.Pos.Z - ppos.Z;
                 double dSq = dx * dx + dz * dz;
                 if (dSq > maxRSq) continue;
                 if (dSq < bestSq)
