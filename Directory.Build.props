@@ -1,0 +1,14 @@
+<Project>
+
+  <!-- Every release names its DLL after its version, lionfox_elkutils-<modinfo version>.dll, read from modinfo.json here for
+       the mod and its tests alike. A one-click ModDB install leaves the world and joins again in the same game
+       process, and .NET never unloads a DLL: a new build under the old assembly name was refused ("Assembly with
+       same name is already loaded") and the mod dropped out of that session. A mod with item, block or entity
+       classes then crashed the client on the server's first one (Gearwings 0.1.5, 2026-11-06). Under its own name
+       each release loads beside the one before. -->
+  <PropertyGroup>
+    <ModVersion>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)modinfo.json')), '(?&lt;="version"\s*:\s*")[^"]+'))</ModVersion>
+    <ModAssembly>lionfox_elkutils-$(ModVersion)</ModAssembly>
+  </PropertyGroup>
+
+</Project>
